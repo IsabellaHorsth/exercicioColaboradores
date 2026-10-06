@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico: Métodos de Consulta Spring Data JPA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo customizado para a barra de rolagem */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+
+        <!-- Cabeçalho -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Métodos de Consulta Derivados</h1>
+            <p class="text-lg md:text-xl text-indigo-400">Um Guia Visual para Spring Data JPA</p>
+        </header>
+
+        <main class="space-y-8">
+
+            <!-- Seção de Introdução -->
+            <section class="bg-gray-800/50 p-6 rounded-xl shadow-lg border border-gray-700">
+                <p class="text-center text-lg leading-relaxed">
+                    O Spring Data JPA permite criar consultas ao banco de dados de forma automática, apenas nomeando os métodos da sua interface de repositório de maneira inteligente. Isso elimina a necessidade de escrever consultas SQL ou JPQL na maioria dos casos.
+                </p>
+            </section>
+            
+            <!-- Seção Anatomia -->
+            <section class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                <h2 class="text-2xl font-semibold text-white mb-4 border-l-4 border-indigo-500 pl-4">Anatomia de um Método de Consulta</h2>
+                <div class="bg-gray-900 p-4 rounded-lg text-center my-4">
+                    <code class="text-lg text-green-400 font-mono tracking-wider">find...By<span class="text-cyan-400">+</span>NomeDoAtributo<span class="text-cyan-400">+</span>(Condição)</code>
+                </div>
+                <ul class="space-y-3 mt-4 text-gray-300">
+                    <li><strong class="text-indigo-400 font-semibold">Prefixo (`find...By`):</strong> Indica a ação de busca. Pode ser `read...By`, `get...By`, `query...By`, etc.</li>
+                    <li><strong class="text-indigo-400 font-semibold">Atributo (`NomeDoAtributo`):</strong> O nome exato de um campo da sua classe de entidade (ex: `Nome`, `Email`, `Idade`).</li>
+                    <li><strong class="text-indigo-400 font-semibold">Condição (`Condição`):</strong> Palavras-chave que definem o filtro da sua consulta (ex: `Containing`, `GreaterThan`).</li>
+                </ul>
+            </section>
+
+            <!-- Seção Palavras-chave -->
+            <section class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                <h2 class="text-2xl font-semibold text-white mb-4 border-l-4 border-indigo-500 pl-4">💡 Resumo Rápido das Palavras-chave</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-700/50">
+                            <tr>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-white rounded-tl-lg">Palavra-chave</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-white rounded-tr-lg">O que faz</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700">
+                            <tr class="bg-gray-800/50">
+                                <td class="p-3 font-mono text-indigo-400">Containing</td>
+                                <td class="p-3 text-gray-300">Verifica se o campo contém o valor especificado (similar ao `LIKE %valor%`).</td>
+                            </tr>
+                            <tr class="bg-gray-900/50">
+                                <td class="p-3 font-mono text-indigo-400">StartingWith</td>
+                                <td class="p-3 text-gray-300">Verifica se o campo começa com o valor especificado (similar ao `LIKE valor%`).</td>
+                            </tr>
+                            <tr class="bg-gray-800/50">
+                                <td class="p-3 font-mono text-indigo-400">EndingWith</td>
+                                <td class="p-3 text-gray-300">Verifica se o campo termina com o valor especificado (similar ao `LIKE %valor`).</td>
+                            </tr>
+                            <tr class="bg-gray-900/50">
+                                <td class="p-3 font-mono text-indigo-400">IgnoreCase</td>
+                                <td class="p-3 text-gray-300">Ignora se os caracteres são maiúsculos ou minúsculos na comparação.</td>
+                            </tr>
+                            <tr class="bg-gray-800/50">
+                                <td class="p-3 font-mono text-indigo-400">GreaterThan, LessThan</td>
+                                <td class="p-3 text-gray-300">Busca por valores maiores/menores que o parâmetro fornecido.</td>
+                            </tr>
+                            <tr class="bg-gray-900/50">
+                                <td class="p-3 font-mono text-indigo-400">Between</td>
+                                <td class="p-3 text-gray-300">Busca por valores que estão entre dois parâmetros (inclusivo).</td>
+                            </tr>
+                            <tr class="bg-gray-800/50">
+                                <td class="p-3 font-mono text-indigo-400">Top, First</td>
+                                <td class="p-3 text-gray-300">Limita o número de resultados retornados pela consulta.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seção Exemplos -->
+            <section class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                <h2 class="text-2xl font-semibold text-white mb-6 border-l-4 border-indigo-500 pl-4">🚀 Outros Exemplos Úteis</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Exemplo 1 -->
+                    <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 flex flex-col">
+                        <h3 class="font-semibold text-lg text-white mb-2">1. ID maior que um valor</h3>
+                        <p class="text-sm text-gray-400 mb-3">Busca entidades cujo `id` é maior que o valor fornecido.</p>
+                        <pre class="bg-gray-900 p-3 rounded-md text-sm overflow-x-auto"><code class="language-java text-gray-300">List&lt;Produto&gt; <span class="text-green-400">findByIdGreaterThan</span>(Long id);</code></pre>
+                        <div class="mt-4 pt-3 border-t border-gray-700/50">
+                            <p class="text-sm font-semibold text-indigo-400 mb-2">Exemplo de Retorno (JSON):</p>
+                            <pre class="bg-gray-950 p-3 rounded-md text-xs overflow-x-auto"><code class="language-json text-gray-300">
+[
+  { "id": 101, "nome": "Produto A" },
+  { "id": 102, "nome": "Produto B" }
+]
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo 2 -->
+                    <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 flex flex-col">
+                        <h3 class="font-semibold text-lg text-white mb-2">2. Busca entre Datas</h3>
+                        <p class="text-sm text-gray-400 mb-3">Encontra registros entre uma data de início e uma data de fim.</p>
+                        <pre class="bg-gray-900 p-3 rounded-md text-sm overflow-x-auto"><code class="language-java text-gray-300">List&lt;Usuario&gt; <span class="text-green-400">findByDataNascimentoBetween</span>(Date inicio, Date fim);</code></pre>
+                        <div class="mt-4 pt-3 border-t border-gray-700/50">
+                            <p class="text-sm font-semibold text-indigo-400 mb-2">Exemplo de Retorno (JSON):</p>
+                            <pre class="bg-gray-950 p-3 rounded-md text-xs overflow-x-auto"><code class="language-json text-gray-300">
+[
+  { "nome": "Ana", "dataNascimento": "1995-03-15" },
+  { "nome": "Carlos", "dataNascimento": "1996-08-22" }
+]
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo 3 -->
+                    <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 flex flex-col">
+                        <h3 class="font-semibold text-lg text-white mb-2">3. Nomes que começam com...</h3>
+                        <p class="text-sm text-gray-400 mb-3">Encontra usuários cujo nome começa com "Jo".</p>
+                        <pre class="bg-gray-900 p-3 rounded-md text-sm overflow-x-auto"><code class="language-java text-gray-300">List&lt;Usuario&gt; <span class="text-green-400">findByNomeStartingWith</span>(String prefixo);</code></pre>
+                        <div class="mt-4 pt-3 border-t border-gray-700/50">
+                            <p class="text-sm font-semibold text-indigo-400 mb-2">Exemplo de Retorno (JSON):</p>
+                            <pre class="bg-gray-950 p-3 rounded-md text-xs overflow-x-auto"><code class="language-json text-gray-300">
+[
+  { "nome": "João" },
+  { "nome": "José" },
+  { "nome": "Jonas" }
+]
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo 4 -->
+                    <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 flex flex-col">
+                        <h3 class="font-semibold text-lg text-white mb-2">4. Combinando Palavras-chave</h3>
+                        <p class="text-sm text-gray-400 mb-3">Busca por nome que contenha "joao", ignorando maiúsculas/minúsculas.</p>
+                        <pre class="bg-gray-900 p-3 rounded-md text-sm overflow-x-auto"><code class="language-java text-gray-300">List&lt;Usuario&gt; <span class="text-green-400">findByNomeContainingIgnoreCase</span>(String termo);</code></pre>
+                        <div class="mt-4 pt-3 border-t border-gray-700/50">
+                            <p class="text-sm font-semibold text-indigo-400 mb-2">Exemplo de Retorno para a busca "joao":</p>
+                            <pre class="bg-gray-950 p-3 rounded-md text-xs overflow-x-auto"><code class="language-json text-gray-300">
+[
+  { "nome": "Joao da Silva" },
+  { "nome": "Maria Joao" },
+  { "nome": "JOSE JOAO" }
+]
+                            </code></pre>
+                        </div>
+                    </div>
+                    
+                    <!-- Exemplo 5 -->
+                    <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 flex flex-col">
+                        <h3 class="font-semibold text-lg text-white mb-2">5. Limitando Resultados (Top)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Busca os 3 funcionários com os maiores salários.</p>
+                        <pre class="bg-gray-900 p-3 rounded-md text-sm overflow-x-auto"><code class="language-java text-gray-300">List&lt;Funcionario&gt; <span class="text-green-400">findTop3ByOrderBySalarioDesc</span>();</code></pre>
+                        <div class="mt-4 pt-3 border-t border-gray-700/50">
+                             <p class="text-sm font-semibold text-indigo-400 mb-2">Exemplo de Retorno (JSON):</p>
+                            <pre class="bg-gray-950 p-3 rounded-md text-xs overflow-x-auto"><code class="language-json text-gray-300">
+[
+  { "nome": "Diretor", "salario": 25000 },
+  { "nome": "Gerente Sênior", "salario": 18000 },
+  { "nome": "Arquiteto de Software", "salario": 15000 }
+]
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo 6 -->
+                    <div class="bg-gray-900/70 p-4 rounded-lg border border-gray-700 flex flex-col">
+                        <h3 class="font-semibold text-lg text-white mb-2">6. Consultando Atributos Aninhados</h3>
+                        <p class="text-sm text-gray-400 mb-3">Localiza usuários pela cidade do seu endereço.</p>
+                        <pre class="bg-gray-900 p-3 rounded-md text-sm overflow-x-auto"><code class="language-java text-gray-300">List&lt;Usuario&gt; <span class="text-green-400">findByEnderecoCidade</span>(String cidade);</code></pre>
+                        <div class="mt-4 pt-3 border-t border-gray-700/50">
+                            <p class="text-sm font-semibold text-indigo-400 mb-2">Exemplo de Retorno para "São Paulo":</p>
+                             <pre class="bg-gray-950 p-3 rounded-md text-xs overflow-x-auto"><code class="language-json text-gray-300">
+[
+  { "nome": "Fernanda", "endereco": { "cidade": "São Paulo" } },
+  { "nome": "Ricardo", "endereco": { "cidade": "São Paulo" } }
+]
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Rodapé -->
+        <footer class="text-center mt-10 pt-6 border-t border-gray-700">
+            <p class="text-gray-500">Infográfico criado para facilitar o entendimento do Spring Data JPA.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
